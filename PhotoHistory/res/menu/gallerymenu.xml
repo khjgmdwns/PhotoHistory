@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/theme"
+        android:title="테마목록에 추가"/>
+    <item
+        android:id="@+id/marker"
+        android:title="지도에 표시"/>
+    <item
+        android:id="@+id/del"
+        android:title="삭제"/>
+    <item
+        android:id="@+id/view_gps"
+        android:icon="@android:drawable/ic_menu_mylocation"
+        android:showAsAction="always"
+        android:title="마커만"
+        android:visible="true">
+    </item>
+
+</menu>

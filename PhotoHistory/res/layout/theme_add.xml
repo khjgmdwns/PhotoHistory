@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5pt" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5pt"
+        android:text="테마 이름" />
+
+    <EditText
+        android:id="@+id/tName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15pt"
+        android:text="설명" />
+
+    <EditText
+        android:id="@+id/tMemo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        android:inputType="text|textMultiLine|textAutoCorrect"
+        android:minLines="3" />
+
+    <requestFocus />
+
+
+</LinearLayout>

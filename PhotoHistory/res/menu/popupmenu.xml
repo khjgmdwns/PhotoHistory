@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/popup_reInfo"
+        android:title="테마정보 수정"/>
+    <item
+        android:id="@+id/popup_upload"
+        android:title="사진추가"/>
+    <item
+        android:id="@+id/popup_del"
+        android:title="삭제"/>
+
+</menu>
