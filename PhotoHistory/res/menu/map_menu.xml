@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.maptest.MainActivity" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/abc_ic_menu_moreoverflow_normal_holo_dark"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/action_settings">
+        <menu>
+            <item
+                android:id="@+id/addline"
+                android:title="경로확인"/>
+            <item
+                android:id="@+id/maptype"
+                android:title="위성지도"/>
+        </menu>
+    </item>
+
+</menu>
