@@ -39,9 +39,11 @@ public class ListActivity extends Activity {
 	private Context ctx;
 	private List<String> readDes;
 	public List<String> readID;
-
+	public List<String> readDeg;
+	
 	String[] projection = { MediaStore.Images.Media._ID,
-			MediaStore.Images.Media.DESCRIPTION };// 테마필드
+			MediaStore.Images.Media.DESCRIPTION,
+			MediaStore.Images.Media.ORIENTATION};// 테마필드
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,11 +105,14 @@ public class ListActivity extends Activity {
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
 				selection, selectionArgs,
 				MediaStore.Images.Media.DATE_ADDED + " desc ");
-
+		
+		int IDCol = Cursor.getColumnIndex(MediaStore.Images.Media._ID);
+		int DEGCol = Cursor.getColumnIndex(MediaStore.Images.Media.ORIENTATION);
 		if (Cursor.getCount() > 0) {
-			int IDCol = Cursor.getColumnIndex(MediaStore.Images.Media._ID);
+			
 			Cursor.moveToPosition(0);
 			readID.add(Cursor.getString(IDCol));
+			
 		} else {
 			readID.add("");
 		}
@@ -117,13 +122,17 @@ public class ListActivity extends Activity {
 
 	public void setFirstID() {
 		readID = new ArrayList<String>();// 초기화
-
+		readDeg = new ArrayList<String>();
+		
 		Cursor allCursor = getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
 				null, MediaStore.Images.Media.DATE_ADDED + " desc ");
 		int allIDCol = allCursor.getColumnIndex(MediaStore.Images.Media._ID);
+		int allDEGCol = allCursor.getColumnIndex(MediaStore.Images.Media.ORIENTATION);
 		allCursor.moveToPosition(0);
 		readID.add(allCursor.getString(allIDCol));
+		readDeg.add(allCursor.getString(allDEGCol));
+		
 		allCursor.close();
 	}
 
@@ -136,7 +145,7 @@ public class ListActivity extends Activity {
 
 		readID = new ArrayList<String>();
 		readDes = new ArrayList<String>();
-
+		
 		Cursor = getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
 				selection, selectionArgs,
