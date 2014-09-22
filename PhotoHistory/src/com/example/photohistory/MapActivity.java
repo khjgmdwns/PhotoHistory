@@ -70,40 +70,6 @@ public class MapActivity extends FragmentActivity implements LocationListener {
 
 	}
 
-	private Double ConvertFormat(int type, String a) {
-		String str= "";
-		
-		if (type == 0)
-			str = a.replace("GPSLatitude : ", "");
-		else if (type == 1)
-			str = a.replace("GPSLongitude : ", "");
-		
-		Log.i("theme", str);
-		StringTokenizer Token = new StringTokenizer(str, ",");
-		
-		String Do;
-		String Bun;
-		String Cho;
-				
-		Do = Token.nextToken();
-		StringTokenizer tokenDo = new StringTokenizer(Do, "/");
-		
-		Bun = Token.nextToken();
-		StringTokenizer tokenBun = new StringTokenizer(Bun, "/");
-		
-		Cho = Token.nextToken();
-		StringTokenizer tokenCho = new StringTokenizer(Cho, "/");
-		Double res= 0.;
-		
-		res = Double.valueOf(tokenDo.nextToken()) / Double.valueOf(tokenDo.nextToken());
-		res += Double.valueOf(tokenBun.nextToken()) / Double.valueOf(tokenBun.nextToken()) * 60;
-		res += Double.valueOf(tokenCho.nextToken()) / Double.valueOf(tokenCho.nextToken()) *3600;
-		
-		Log.i("theme", ""+res);
-		
-		return res;
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {// 위치설정
 		super.onActivityResult(requestCode, resultCode, data);
@@ -185,17 +151,17 @@ public class MapActivity extends FragmentActivity implements LocationListener {
 		po = new PolylineOptions();
 		po.color(Color.RED);
 		for (int i = 0; i < mImageInfoList.size(); i++) {
-			if ((mImageInfoList.get(i).getLat() != null)
-					&& !mImageInfoList.get(i).getLat()
-							.contains("GPSLatitude : null")) {
-				Double a = ConvertFormat(0, mImageInfoList.get(i).getLat());
-				Double b = ConvertFormat(1, mImageInfoList.get(i).getLng());
 
+			Double a = mImageInfoList.get(i).getLat();
+			Double b = mImageInfoList.get(i).getLng();
+
+			if (a != 0.) {
 				po.add(new LatLng(a, b));
 
 				addMarker(a, b, mImageInfoList.get(i).getId(), mImageInfoList
 						.get(i).getDate(), mImageInfoList.get(i).getDeg());
 			}
+
 		}
 
 		LatLng StartPoint = new LatLng(36.738884, 127.902832);// 시작위치

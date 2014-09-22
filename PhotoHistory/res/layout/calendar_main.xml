@@ -1,6 +1,5 @@
-<?xml version="1.0"?>
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -105,27 +104,29 @@
         android:layout_weight="10" />
 
     <RelativeLayout
+        android:id="@+id/dateInfo"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="4"
         android:background="#ffffff" >
 
         <ImageView
-            android:id="@+id/calendar_image"
-            android:layout_width="150dp"
+            android:id="@+id/selectedThumb"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:gravity="center_horizontal" />
+            android:gravity="center_horizontal"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/calendar_image"
+            android:layout_alignTop="@id/selectedThumb"
             android:layout_marginLeft="3dp"
-            android:layout_toRightOf="@id/calendar_image"
-            android:text="9월 10일 메모"
-            android:textColor="#000000" />
+            android:layout_toRightOf="@id/selectedThumb"
+            android:textColor="#000000"
+            android:visibility="invisible" />
 
         <com.example.Calendar.CTextView
             android:id="@+id/textView3"
@@ -136,7 +137,6 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/textView2"
             android:layout_marginLeft="3dp"
-            android:text="아침에 우리집 고양이 니달리를 목욕시켰다. 물을 싫어해서 목욕하는 동안 계속 울었다. 목욕이 끝나고 20분간 드라이를 한뒤 통조림 간식을 줬다."
             android:textColor="#000000" />
     </RelativeLayout>
 

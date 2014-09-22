@@ -47,7 +47,7 @@ public class GalleryMain extends Activity implements
 	ProgressDialog mLoagindDialog; // 다이얼로그
 	GridView mGvImageList; // 섬네일 이미지 뷰
 	ImageAdapter mListAdapter; // 체크이미지 뷰
-	
+
 	ArrayList<ThumbImageInfo> mThumbImageInfoList; // 섬네일에 대한 정보 <id,
 													// bmp,checkedState>
 
@@ -72,9 +72,9 @@ public class GalleryMain extends Activity implements
 											// 이미지
 											// 경로
 			MediaStore.Images.Media.LATITUDE,// 위도
-			MediaStore.Images.Media.ORIENTATION,
+			MediaStore.Images.Media.ORIENTATION, MediaStore.Images.Media.SIZE,
 			MediaStore.Images.Media.DESCRIPTION };// 테마필드
-	
+
 	String[] Checked_ID;// 체크된 id리스트를 배열로 변환하기위한 공간
 
 	int WhichButton = 0;// 리스트 목록의 눌려진 번호
@@ -105,7 +105,7 @@ public class GalleryMain extends Activity implements
 				- (displayMetrics.widthPixels / 50);
 		height = (displayMetrics.widthPixels / 4)
 				+ (displayMetrics.widthPixels / 20);
-		
+
 		setButton();
 
 	}
@@ -204,17 +204,31 @@ public class GalleryMain extends Activity implements
 
 			for (int i = 0; i < mThumbImageInfoList.size(); i++) {
 				if (mThumbImageInfoList.get(i).getCheckedState()) {// 체크 on이면
+
+					Double lat = 0.;
+					Double lng = 0.;
+
+					if ((mThumbImageInfoList.get(i).getlat() != null)// 위치정보 영역이
+																		// null이
+																		// 아니면
+							&& !mThumbImageInfoList.get(i).getlat()
+									.contains("GPSLatitude : null")) {
+						lat = ConvertFormat(0, mThumbImageInfoList.get(i)
+								.getlat());
+						lng = ConvertFormat(1, mThumbImageInfoList.get(i)
+								.getlng());
+					}
+
 					mImageInfoList.add(new ImageInfo(mThumbImageInfoList.get(i)
-							.getData(), mThumbImageInfoList.get(i).getlat(),
-							mThumbImageInfoList.get(i).getlng(),
-							mThumbImageInfoList.get(i).getId(),
-							mThumbImageInfoList.get(i).getDate(),
-							mThumbImageInfoList.get(i).getDeg()));
+							.getData(), lat, lng, mThumbImageInfoList.get(i)
+							.getId(), mThumbImageInfoList.get(i).getDate(),
+							mThumbImageInfoList.get(i).getDeg(),
+							mThumbImageInfoList.get(i).getSize()));
 					NoneChecked = true;
 				}
 			}
-
 			break;
+
 		case 1:// 테마등록(id)
 			CheckList = new ArrayList<String>();// 체크된 이미지의 id가 저장될 공간
 			CheckedDes = new ArrayList<String>();// 체크된 이미지의 description이 저장될 공간
@@ -279,9 +293,12 @@ public class GalleryMain extends Activity implements
 					.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN);
 			int imageDegCol = imageCursor
 					.getColumnIndex(MediaStore.Images.Media.ORIENTATION);
+			int imageSizeCol = imageCursor
+					.getColumnIndex(MediaStore.Images.Media.SIZE);
 
 			// 커서에서 이미지의 ID와 경로명을 가져와서 ThumbImageInfo 모델 클래스를 생성해서
 			// 리스트에 더해준다.
+
 			while (imageCursor.moveToNext()) {
 				ThumbImageInfo thumbInfo = new ThumbImageInfo();
 
@@ -294,13 +311,15 @@ public class GalleryMain extends Activity implements
 				cal.setTimeInMillis(Long.valueOf(imageCursor
 						.getString(imageDateCol)));
 				d = cal.getTime();
-				DateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
+				DateFormat sdFormat = new SimpleDateFormat("yyyy년 MM월 dd일 a hh:mm");
 				String temp = sdFormat.format(d);
 
 				thumbInfo.setDate(temp);
 				thumbInfo.setlat(imageCursor.getString(imageLatCol));
 				thumbInfo.setCheckedState(false);// 체크상태 초기화
 				thumbInfo.setDeg(imageCursor.getString(imageDegCol));
+				thumbInfo.setSize(imageCursor.getString(imageSizeCol));
+
 				mThumbImageInfoList.add(thumbInfo);
 
 				returnValue++;
@@ -349,6 +368,43 @@ public class GalleryMain extends Activity implements
 
 	}
 
+	private Double ConvertFormat(int type, String a) {
+		String str = "";
+
+		if (type == 0)
+			str = a.replace("GPSLatitude : ", "");
+		else if (type == 1)
+			str = a.replace("GPSLongitude : ", "");
+
+		Log.i("theme", str);
+		StringTokenizer Token = new StringTokenizer(str, ",");
+
+		String Do;
+		String Bun;
+		String Cho;
+
+		Do = Token.nextToken();
+		StringTokenizer tokenDo = new StringTokenizer(Do, "/");
+
+		Bun = Token.nextToken();
+		StringTokenizer tokenBun = new StringTokenizer(Bun, "/");
+
+		Cho = Token.nextToken();
+		StringTokenizer tokenCho = new StringTokenizer(Cho, "/");
+		Double res = 0.;
+
+		res = Double.valueOf(tokenDo.nextToken())
+				/ Double.valueOf(tokenDo.nextToken());
+		res += Double.valueOf(tokenBun.nextToken())
+				/ Double.valueOf(tokenBun.nextToken()) * 60;
+		res += Double.valueOf(tokenCho.nextToken())
+				/ Double.valueOf(tokenCho.nextToken()) * 3600;
+
+		Log.i("theme", "" + res);
+
+		return res;
+	}
+
 	// 화면에 이미지들을 뿌려준다.
 	private void updateUI() {
 		mListAdapter = new ImageAdapter(this, R.layout.image_cell,
@@ -365,14 +421,14 @@ public class GalleryMain extends Activity implements
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 			long arg3) {
 		ImageAdapter adapter = (ImageAdapter) arg0.getAdapter();
-	    ThumbImageInfo rowData = (ThumbImageInfo)adapter.getItem(position);
-	    boolean curCheckState = rowData.getCheckedState();
-	    
-	    rowData.setCheckedState(!curCheckState);
-	    
-	    mThumbImageInfoList.get(position).setCheckedState(!curCheckState);
-	    adapter.notifyDataSetChanged();
-	    Log.i("in402", "확인1");
+		ThumbImageInfo rowData = (ThumbImageInfo) adapter.getItem(position);
+		boolean curCheckState = rowData.getCheckedState();
+
+		rowData.setCheckedState(!curCheckState);
+
+		mThumbImageInfoList.get(position).setCheckedState(!curCheckState);
+		adapter.notifyDataSetChanged();
+		Log.i("in402", "확인1");
 	}
 
 	private class ImageAdapter extends BaseAdapter {
@@ -419,7 +475,7 @@ public class GalleryMain extends Activity implements
 						.findViewById(R.id.chkImage);
 				holder.gpsImage = (ImageView) convertView
 						.findViewById(R.id.gpsimage);
-	
+
 				convertView.setLayoutParams(new GridView.LayoutParams(width,
 						height));
 

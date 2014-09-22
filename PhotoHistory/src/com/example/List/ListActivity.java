@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.Gallery.GalleryMain;
 import com.example.photohistory.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -61,7 +60,7 @@ public class ListActivity extends Activity {
 
 		for (int i = 1; i < size; i++) {
 			String a = pref.getString("Name" + "" + i, "");
-			String b = pref.getString("tMemos" + "" + i, "");
+			String b = pref.getString("Memo" + "" + i, "");
 
 			tList.add(new ThemeInfo(a, b));
 		}
@@ -378,9 +377,9 @@ public class ListActivity extends Activity {
 				// 섬네일 이미지를 가져와서 저장
 				getApplicationContext().getContentResolver(), int_id,
 				MediaStore.Images.Thumbnails.MICRO_KIND, options);
-		System.gc();
 		return bmp;
 	}
+	
 	public void UpdateList(){
 		setFirstID();
 		for (int i = 1; i < tList.size(); i++)

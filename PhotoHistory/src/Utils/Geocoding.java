@@ -25,7 +25,13 @@ public class Geocoding {
 					latlng.longitude, 1);
 			if (addresses != null) {
 				Address addr = addresses.get(0);
-				sLocationInfo = String.format("%s %s %s", addr.getAdminArea(), addr.getLocality(), addr.getThoroughfare());
+				
+				String AdminArea = addr.getAdminArea();
+				
+				AdminArea = AdminArea.replace("광역시", "");
+				AdminArea = AdminArea.replace("특별시", "");
+				
+				sLocationInfo = String.format("%s %s %s", AdminArea, addr.getLocality(), addr.getThoroughfare());
 
 			}// end if
 		} catch (IOException e) {

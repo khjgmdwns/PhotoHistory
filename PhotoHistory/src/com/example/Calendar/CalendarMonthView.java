@@ -111,10 +111,10 @@ public class CalendarMonthView extends GridView {
 
 		public void onItemClick(AdapterView parent, View v, int position, long id) {
 			 
-			if (adapter != null) {
+			/*if (adapter != null) {	// 선택영역 표시 이벤트 (속도 저하)
 				adapter.setSelectedPosition(position);
 				adapter.notifyDataSetInvalidated();
-			}
+			}*/
 
 			if (selectionListener != null) {
 				selectionListener.onDataSelected(parent, v, position, id);

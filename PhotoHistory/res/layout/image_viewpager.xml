@@ -14,22 +14,22 @@
         android:background="#000000" />
 
     <TextView
-        android:id="@+id/describe"
+        android:id="@+id/photho_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop = "15dp"
         android:text="촬영날짜 : 2014.09.03 오전 1:03" />
 
     <TextView
-        android:id="@+id/describe2"
+        android:id="@+id/photho_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="사진크기 : 2134 KB" />
+        android:text="사진크기 몰라" />
 
     <TextView
-        android:id="@+id/describe3"
+        android:id="@+id/photho_addr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="위치정보 : 부산시 금정구 구서동" />
+        android:text="위치: 정보 없음" />
 
 </LinearLayout>

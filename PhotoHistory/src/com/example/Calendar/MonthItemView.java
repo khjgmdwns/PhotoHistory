@@ -8,10 +8,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.example.photohistory.R;
+import com.example.photohistory.*;
 import com.google.android.gms.internal.co;
 
 import Utils.ThumbImageInfo;
+import android.R.drawable;
 import android.app.*;
 import android.content.*;
 import android.database.Cursor;
@@ -34,15 +35,17 @@ public class MonthItemView extends LinearLayout {
 	static final int INVISIBLE = 0x00000004;
 	String tmpID;
 	String tmpDEG;
+	String tmpPATH;
 	TextView dayText;
-	ImageView calendarThumb;
+	ImageView calendarThumb;	
 	Context context;
 	int year, month;
 	private MonthItem item;
 
 	String[] projection = { MediaStore.Images.Media._ID,
 			MediaStore.Images.Media.DATE_TAKEN,
-			MediaStore.Images.Media.ORIENTATION, };// 테마필드
+			MediaStore.Images.Media.ORIENTATION,
+			MediaStore.Images.Media.DATA};// 테마필드
 
 	public MonthItemView(Context context, int year, int month) {
 		super(context);
@@ -85,17 +88,22 @@ public class MonthItemView extends LinearLayout {
 				where, null, MediaStore.Images.Media.DATE_ADDED + " desc ");
 		
 		if (cr != null && cr.getCount() > 0) {
-			Log.i("cal556", "cursor 사이즈 " + "" + cr.getCount());
+			//Log.i("cal556", "cursor 사이즈 " + "" + cr.getCount());
 			int IDCol = cr.getColumnIndex(MediaStore.Images.Media._ID);
 			int ORCol = cr.getColumnIndex(MediaStore.Images.Media.ORIENTATION);
-			
+			int PATHCol = cr.getColumnIndex(MediaStore.Images.Media.DATA);
 			cr.moveToPosition(0);
 			tmpID = cr.getString(IDCol);
 			tmpDEG = cr.getString(ORCol);
+			tmpPATH = cr.getString(PATHCol);
+			if(tmpDEG==null){
+				tmpDEG = "0";
+			}
+			Log.i("tmp", "tmp : " + tmpID + " / " + tmpDEG + " / " + tmpPATH);
 			cr.close();
 			return true;
 		} else {
-			Log.i("cal556", "cursor 사이즈 0.");
+			//Log.i("cal556", "cursor 사이즈 0.");
 			cr.close();
 			return false;
 		}
@@ -103,7 +111,7 @@ public class MonthItemView extends LinearLayout {
 
 	private long getThisMonthInMillis(int year, int month, int day, int hour) {
 
-		Log.i("cal556", "" + year + "" + month + "" + day);
+		//Log.i("cal556", "" + year + "" + month + "" + day);
 		Calendar searchCalendar = Calendar.getInstance();
 		searchCalendar.set(Calendar.YEAR, year);		
 		searchCalendar.set(Calendar.MONTH, month);
@@ -121,7 +129,6 @@ public class MonthItemView extends LinearLayout {
 
 			if (findDayImage(day)) {
 				int int_id = Integer.valueOf(tmpID);// 형변환
-
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inDither = false;
 				options.inSampleSize = 4;
@@ -130,7 +137,7 @@ public class MonthItemView extends LinearLayout {
 						// 섬네일 이미지를 가져와서 저장
 						context.getContentResolver(), int_id,
 						MediaStore.Images.Thumbnails.MICRO_KIND, options);
-				calendarThumb.setImageBitmap(bmp);
+				calendarThumb.setImageBitmap(MainActivity.GetRotatedBitmap(bmp,Integer.valueOf(tmpDEG)));
 				calendarThumb.setVisibility(VISIBLE);
 
 			} else
@@ -146,5 +153,31 @@ public class MonthItemView extends LinearLayout {
 	public void setTextColor(int color) {
 		dayText.setTextColor(color);
 	}
-
+	
+	public Bitmap getImage(int day){
+		//해당 날짜의 이미지를 Bitmap으로 가져옴
+		Bitmap bmp;
+		if (findDayImage(day)) {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inDither = false;
+			options.inSampleSize = 4;
+			options.inPurgeable = true;
+			options.inJustDecodeBounds = false;
+			options.inTempStorage = new byte[16 * 1024];
+			
+			/*int int_id = Integer.valueOf(tmpID);// 형변환
+			bmp = MediaStore.Images.Thumbnails.getThumbnail(
+				// 섬네일 이미지를 가져와서 저장
+				context.getContentResolver(), int_id,
+				MediaStore.Images.Thumbnails.MICRO_KIND, options);*/
+			
+			bmp = BitmapFactory.decodeFile(tmpPATH, options);
+			bmp = MainActivity.GetRotatedBitmap(bmp,Integer.valueOf(tmpDEG));
+			
+			return bmp;
+		}
+		else{
+			return null;
+		}
+	}
 }

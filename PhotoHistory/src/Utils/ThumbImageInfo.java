@@ -10,7 +10,8 @@ public class ThumbImageInfo {
 	private String lng;
 	private String date;
 	private String deg;
-
+	private String size;
+	
 	private boolean checkedState;
 
 	public String getId() {
@@ -69,6 +70,14 @@ public class ThumbImageInfo {
 		this.deg = deg;
 	}
 
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+	
 	public boolean getCheckedState() {
 		return checkedState;
 	}

@@ -3,7 +3,8 @@ package com.example.Calendar;
 import java.util.Calendar;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.graphics.*;
+import android.support.v7.internal.view.menu.MenuView.ItemView;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -47,6 +48,8 @@ public class CalendarMonthAdapter extends BaseAdapter {
 	int screenHeight;
 	
 	Calendar mCalendar;
+	MonthItemView itemView;
+	
 	boolean recreateItems = false;
 	
 	public CalendarMonthAdapter(Context context) {
@@ -176,7 +179,6 @@ public class CalendarMonthAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		//Log.d(TAG, "getView(" + position + ") called.");
 
-		MonthItemView itemView;
 		itemView = new MonthItemView(mContext, getCurYear(), getCurMonth());
 		
 		// create a params
@@ -298,5 +300,9 @@ public class CalendarMonthAdapter extends BaseAdapter {
 	}
 	public int getScreenHeight(){//화면 크기 가져오기
 		return screenHeight;
+	}
+	public Bitmap getSelectedImage(int position){
+		Log.i("getSelectedImage()", "ok");
+		return itemView.getImage(position);
 	}
 }
