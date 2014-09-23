@@ -148,7 +148,6 @@ public class CalendarActivity extends Activity {
 										EditText inputM = (EditText) linear
 												.findViewById(R.id.inputMemo);
 										
-										
 										SharedPreferences.Editor editor = pref
 												.edit();
 										String str = new String();
